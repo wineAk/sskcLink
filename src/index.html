@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: wss: https://script.google.com https://script.googleusercontent.com ;
+             style-src   'self' 'unsafe-inline';
+             media-src   *;
+             img-src     *;
+  ">
+  <title>ダイレクトリンク生成</title>
+  <link rel="shortcut icon" href="images/icon.png">
+  <link rel="stylesheet" href="css/icon.css">
+  <link rel="stylesheet" href="css/materialize.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="section">
+        <div class="col s6">
+          <a id="upload" class="waves-effect waves-light btn grey darken-4 w100">
+            <i class="material-icons left">cloud_upload</i>
+            upload
+          </a>
+          <input type="file" id="file" accept=".html, .htm">
+          <p>選択されていません</p>
+        </div>
+        <div class="col s6">
+          <a id="download" class="waves-effect waves-light btn teal darken-1 w100">
+            <i class="material-icons left">cloud_download</i>
+            save
+          </a>
+        </div>
+      </div>
+      <div class="section">
+        <div class="col s12">
+          <table class="highlight">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>ターゲット</th>
+                <th>変換対象</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script defer src="js/script.js"></script>
+</body>
+
+</html>
