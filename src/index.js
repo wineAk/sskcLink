@@ -16,17 +16,17 @@ if (!gotTheLock) {
       if (win.isMinimized()) win.restore()
       win.show()
     }
-  });
+  })
   app.on('ready', () => createWin())
 }
 app.on('window-all-closed', () => {
   if (process.platform != 'darwin') app.quit()
 })
+
 function createWin() {
   const menu = Menu.buildFromTemplate([{
     label: 'メニュー',
-    submenu: [
-      {
+    submenu: [{
         label: 'リロード',
         accelerator: 'CmdOrCtrl+R',
         click: () => win.reload()
@@ -50,7 +50,7 @@ function createWin() {
     minHeight: 432,
     icon: `${__dirname}/images/icon.png`
   })
-  win.once('ready-to-show', () => win.show());
+  win.once('ready-to-show', () => win.show())
   win.loadURL(`file://${__dirname}/index.html`)
   win.webContents.on('new-window', (ev, url) => {
     ev.preventDefault()

@@ -11,8 +11,11 @@ $(function() {
   $(document).on('change', '#file', (e) => {
     if (!e.target.files.length) return
     const fileName = $(e.target).prop('files')[0].name
+    if (!/\.html?$/.test(fileName))  {
+      alert('HTMLファイルを選択してください')
+      return
+    }
     $(e.target).next().text(fileName)
-    if (!/\.html?$/.test(fileName)) return
     const reader = new FileReader()
     reader.readAsText(e.target.files[0])
     reader.onload = () => {
@@ -45,14 +48,14 @@ $(function() {
       })
       $('tbody').html(elm)
     }
-  });
+  })
   // SAVE
   $(document).on('click', '#download', (e) => {
     if (HTML === '') {
       alert('ファイルがありません')
       return
     }
-    HEAD = HTML.match(/<!.*?<body[^<>]*>/)[0]; // body以前が消えてしまうので保持しておく
+    HEAD = HTML.match(/<!.*?<body[^<>]*>/)[0] // body以前が消えてしまうので保持しておく
     const html = HTML.replace(HEAD, '').replace(/<\/body>|<\/html>/, '') // body内だけ抽出して処理させる
     const $html = $(html)
     $html.find('a').each((index, element) => {
