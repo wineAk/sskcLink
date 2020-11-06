@@ -3,10 +3,11 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: wss: https://script.google.com https://script.googleusercontent.com ;
-             style-src   'self' 'unsafe-inline';
-             media-src   *;
-             img-src     *;
+  <meta http-equiv="Content-Security-Policy"
+  content="
+    default-src 'self';
+    style-src   'self' 'unsafe-inline';
+    img-src     *;
   ">
   <title>ダイレクトリンク生成</title>
   <link rel="shortcut icon" href="images/icon.png">
@@ -16,41 +17,47 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="section">
-        <div class="col s6">
-          <a id="upload" class="waves-effect waves-light btn grey darken-4 w100">
-            <i class="material-icons left">cloud_upload</i>
-            upload
-          </a>
-          <input type="file" id="file" accept=".html, .htm">
-          <p>選択されていません</p>
-        </div>
-        <div class="col s6">
-          <a id="download" class="waves-effect waves-light btn teal darken-1 w100">
-            <i class="material-icons left">cloud_download</i>
-            save
-          </a>
-        </div>
+  <main>
+    <div class="container row section">
+      <div class="col s6 center-align">
+        <a id="upload" class="waves-effect waves-light btn grey darken-3">
+          <i class="material-icons left">cloud_upload</i>
+          upload
+        </a>
+        <input type="file" id="file" accept=".html, .htm">
+        <p id="filename">選択されていません</p>
       </div>
-      <div class="section">
-        <div class="col s12">
-          <table class="highlight">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>ターゲット</th>
-                <th>変換対象</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
+      <div class="col s6 center-align">
+        <a id="download" class="waves-effect waves-light btn green darken-3">
+          <i class="material-icons left">cloud_download</i>
+          download
+        </a>
+      </div>
+      <div class="col s12">
+        <p>変換されたリンク一覧</p>
+        <ul id="list" class="collection with-header">
+          <li class="collection-item">
+            <p class="valign-wrapper">
+              <i class="material-icons">title</i>
+              <span>ここに文字が入ります</span>
+            </p>
+            <p class="valign-wrapper">
+              <i class="material-icons">link</i>
+              <span>ここにカウンタ付リンクになったURLが入ります</span>
+            </p>
+          </li>
+        </ul>
       </div>
     </div>
-  </div>
+  </main>
+  <footer>
+    <div class="center-align">
+      Version <span id="version">0.0.0</span>
+    </div>
+    <div class="center-align">
+      © 2020 InterPark Co.,Ltd. All Rights Reserved.
+    </div>
+  </footer>
   <script defer src="js/script.js"></script>
 </body>
 

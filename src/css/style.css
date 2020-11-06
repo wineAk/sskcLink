@@ -1,17 +1,29 @@
-.w100 {
-  width: 100%;
-}
 [type="file"] {
   display: none;
 }
-td {
-  max-width: 300px;
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  height: 100vh;
+}
+
+main {
+  min-height: calc(100vh - 50px);
+}
+
+footer {
+  height: 50px;
+}
+
+.collection-item {
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-all;
 }
-thead th,
-tr td:first-child,
-tr td:last-child {
-  text-align: center;
+
+.valign-wrapper .material-icons {
+  margin-right: 1rem;
 }

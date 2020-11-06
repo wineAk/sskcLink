@@ -1,14 +1,13 @@
 {
   "name": "sskcLink",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "ダイレクトリンクを生成します",
   "main": "index.js",
   "scripts": {},
   "author": "sskc",
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0",
-    "jquery": "^3.5.1"
+    "electron-squirrel-startup": "^1.0.0"
   },
   "devDependencies": {}
 }

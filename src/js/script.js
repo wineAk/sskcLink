@@ -1,75 +1,71 @@
 'use strict'
-const $ = require('jquery')
-const fs = require('fs')
-let HTML = ''
-let HEAD = ''
-let NAME = ''
-$(function() {
-  // UPLOAD
-  $(document).on('click', '#upload', () => $('#file').click())
-  // ファイルの処理
-  $(document).on('change', '#file', (e) => {
-    if (!e.target.files.length) return
-    const fileName = $(e.target).prop('files')[0].name
-    if (!/\.html?$/.test(fileName))  {
+const {ipcRenderer} = require('electron')
+const nowVersion = ipcRenderer.sendSync('now-version')
+document.addEventListener('DOMContentLoaded', () => {
+  let HTML = ''
+  let NAME = ''
+  if (nowVersion) document.getElementById('version').textContent = nowVersion
+  document.getElementById('upload').addEventListener('click', event => {
+    document.getElementById('file').click()
+  });
+  document.getElementById('download').addEventListener('click', event => {
+    if (HTML === '') return
+    const parent = document.createElement('a')
+    parent.href = `data:text/html, ${encodeURIComponent(HTML)}`
+    parent.download = `${NAME}_カウンタ付リンク.html`
+    parent.click()
+  });
+  document.getElementById('file').addEventListener('change', (event) => {
+    const template = document.getElementById('list').innerHTML
+    const files = event.target.files
+    if (!files.length) return
+    const file = files[0]
+    const fileName = file.name
+    if (!/\.html?$/.test(fileName)) {
       alert('HTMLファイルを選択してください')
       return
     }
-    $(e.target).next().text(fileName)
+    document.getElementById('filename').textContent = fileName
     const reader = new FileReader()
-    reader.readAsText(e.target.files[0])
+    reader.readAsText(file)
     reader.onload = () => {
-      NAME = fileName.replace(/\..*/, '')
-      HTML = reader.result
-      let elm = ''
-      $(HTML).find('a').each((index, element) => {
-        const href = $(element).attr('href')
-        const text = $(element).text().trim()
-        const hrefRep = (href === '') ? '&nbsp;' : href
-        const textRep = (text === '') ? '&nbsp;' : text
-        const checked = (/&nbsp;|\[\[/.test(hrefRep)) ? 'disabled' : 'checked'
-        elm +=
-          `
-          <tr id="rep${index}">
-            <td>
-              ${index}
-            </td>
-            <td>
-              文字列<blockquote>${textRep}</blockquote>
-              URL<blockquote>${hrefRep}</blockquote>
-            </td>
-            <td>
-              <label>
-                <input type="checkbox" ${checked}><span></span>
-              </label>
-            </td>
-          </tr>
-          `
-      })
-      $('tbody').html(elm)
+      const anchorReg = /<a (?:(?!<a |<\/a>).)*<\/a>/g // href="([^"]*)"
+      const name = fileName.replace(/\..*/, '')
+      const html = reader.result
+      const anchorMatchs = html.match(anchorReg)
+      if (anchorMatchs == null) {
+        alert('リンクが1つも存在しないHTMLファイルです')
+        return
+      }
+      let liHtml = ''
+      const newHTML = html.replace(
+        anchorReg,
+        (element) => {
+          const parent = document.createElement('div')
+          parent.innerHTML = element
+          const url = parent.getElementsByTagName('a')[0].getAttribute('href')
+          const text = parent.textContent.replace(/[\|\[\]]/g, ' ')
+          const webform = url.match(/secure-link\.jp\/wf\/\?c=(wf\d{8})/)
+          const newText = (text === '') ? 'テキストなし' : text.trim()
+          const newUrl = (webform === null) ? `[[lc:${url}|${newText}]]` : `[[wf:${webform[1]}|${newText}]]`
+          if (url === '' || /\$dt_|\[\[/.test(url)) return element
+          const newElement = element.replace(url, newUrl)
+          const templateParent = document.createElement('div')
+          templateParent.innerHTML = template
+          templateParent.getElementsByTagName('span')[0].textContent = text
+          templateParent.getElementsByTagName('span')[1].innerHTML = `<a href="${url}" target="_blank">${url}</a>`
+          liHtml += templateParent.innerHTML
+          return newElement
+        }
+      )
+      if (!liHtml.length) {
+        alert('変換が必要なリンクが1つも存在しないHTMLファイルです')
+        document.getElementById('filename').textContent = '選択されていません'
+        return
+      }
+      document.getElementById('list').innerHTML = liHtml
+      HTML = newHTML
+      NAME = name
     }
   })
-  // SAVE
-  $(document).on('click', '#download', (e) => {
-    if (HTML === '') {
-      alert('ファイルがありません')
-      return
-    }
-    HEAD = HTML.match(/<!.*?<body[^<>]*>/)[0] // body以前が消えてしまうので保持しておく
-    const html = HTML.replace(HEAD, '').replace(/<\/body>|<\/html>/, '') // body内だけ抽出して処理させる
-    const $html = $(html)
-    $html.find('a').each((index, element) => {
-      const href = $(element).attr('href')
-      const text = $(element).text().trim()
-      const link = `[[lc:${href}|${text}]]`
-      const checked = $(`#rep${index}`).find('input').prop('checked')
-      if (checked) $html.find('a').eq(index).attr('href', link)
-    })
-    const body = $('<div>').append($html.clone()).html()
-    const newHTML = `${HEAD}${body}</body></html>`
-    $('<a>', {
-      href: `data:text/html, ${encodeURIComponent(newHTML)}`,
-      download: `${NAME}_カウンタ付リンク.html`
-    })[0].click()
-  })
-})
+}, false);

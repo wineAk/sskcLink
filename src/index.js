@@ -1,11 +1,7 @@
 'use strict'
 if (require('electron-squirrel-startup')) return
-const {
-  app,
-  shell,
-  BrowserWindow,
-  Menu
-} = require('electron')
+const packagejson = require('./package.json')
+const {app, BrowserWindow, ipcMain, Menu, shell} = require('electron')
 let win = null
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
@@ -21,6 +17,9 @@ if (!gotTheLock) {
 }
 app.on('window-all-closed', () => {
   if (process.platform != 'darwin') app.quit()
+})
+ipcMain.on('now-version', (event) => {
+  event.returnValue = packagejson['version']
 })
 
 function createWin() {
@@ -44,9 +43,9 @@ function createWin() {
       nodeIntegration: true
     },
     show: false,
-    width: 960,
-    height: 540,
-    minWidth: 768,
+    width: 768,
+    height: 432,
+    minWidth: 512,
     minHeight: 432,
     icon: `${__dirname}/images/icon.png`
   })
