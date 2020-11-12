@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (nowVersion) document.getElementById('version').textContent = nowVersion
   document.getElementById('upload').addEventListener('click', event => {
     document.getElementById('file').click()
-  });
+  })
   document.getElementById('download').addEventListener('click', event => {
     if (HTML === '') return
     const parent = document.createElement('a')
     parent.href = `data:text/html, ${encodeURIComponent(HTML)}`
     parent.download = `${NAME}_カウンタ付リンク.html`
     parent.click()
-  });
+  })
   document.getElementById('file').addEventListener('change', (event) => {
     const template = document.getElementById('list').innerHTML
     const files = event.target.files
@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('HTMLファイルを選択してください')
       return
     }
-    document.getElementById('filename').textContent = fileName
     const reader = new FileReader()
     reader.readAsText(file)
     reader.onload = () => {
@@ -43,16 +42,18 @@ document.addEventListener('DOMContentLoaded', () => {
         (element) => {
           const parent = document.createElement('div')
           parent.innerHTML = element
+          const img = parent.getElementsByTagName('img')
+          const alt = (img.length) ? img[0].getAttribute('alt').trim() : ''
+          const text = parent.textContent.replace(/[\|\[\]]/g, ' ').trim()
+          const newText = (text.length) ? text : (alt.length) ? alt : 'テキストなし'
           const url = parent.getElementsByTagName('a')[0].getAttribute('href')
-          const text = parent.textContent.replace(/[\|\[\]]/g, ' ')
           const webform = url.match(/secure-link\.jp\/wf\/\?c=(wf\d{8})/)
-          const newText = (text === '') ? 'テキストなし' : text.trim()
           const newUrl = (webform === null) ? `[[lc:${url}|${newText}]]` : `[[wf:${webform[1]}|${newText}]]`
           if (url === '' || /\$dt_|\[\[/.test(url)) return element
           const newElement = element.replace(url, newUrl)
           const templateParent = document.createElement('div')
           templateParent.innerHTML = template
-          templateParent.getElementsByTagName('span')[0].textContent = text
+          templateParent.getElementsByTagName('span')[0].textContent = (text.length) ? text : (alt.length) ? alt : ''
           templateParent.getElementsByTagName('span')[1].innerHTML = `<a href="${url}" target="_blank">${url}</a>`
           liHtml += templateParent.innerHTML
           return newElement
@@ -60,12 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
       )
       if (!liHtml.length) {
         alert('変換が必要なリンクが1つも存在しないHTMLファイルです')
-        document.getElementById('filename').textContent = '選択されていません'
         return
       }
       document.getElementById('list').innerHTML = liHtml
+      document.getElementById('filename').textContent = fileName
       HTML = newHTML
       NAME = name
     }
   })
-}, false);
+}, false)
