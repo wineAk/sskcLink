@@ -12,3 +12,9 @@ npm run packager
 ```
 npm run installer
 ```
+更新
+```
+npm run update
+npm run updatesrc
+```
+※必須パッケージ `npm i -g npm-check-updates` をインストールしておくこと

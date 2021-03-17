@@ -1,19 +1,21 @@
 {
   "name": "sskcLink",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "ダイレクトリンクを生成します",
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/.bin/electron src",
     "packager": "./node_modules/.bin/electron-packager src sskcLink --platform=win32 --arch=ia32 --icon=src/images/icon.png --overwrite",
-    "installer": "./node_modules/.bin/electron-installer-windows --src sskcLink-win32-ia32/ --dest sskcLink-installers --icon src/images/icon.ico"
+    "installer": "./node_modules/.bin/electron-installer-windows --src sskcLink-win32-ia32/ --dest sskcLink-installers --icon src/images/icon.ico",
+    "update": "ncu -u && npm i",
+    "updatesrc": "cd src && ncu -u && npm i"
   },
   "author": "sskc",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "electron": "^10.1.3",
-    "electron-packager": "^15.1.0",
-    "electron-installer-windows": "^3.0.0"
+    "electron": "^10.4.1",
+    "electron-installer-windows": "^3.0.0",
+    "electron-packager": "^15.2.0"
   }
 }
