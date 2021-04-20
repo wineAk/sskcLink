@@ -2,6 +2,7 @@
 if (require('electron-squirrel-startup')) return
 const packagejson = require('./package.json')
 const {app, BrowserWindow, ipcMain, Menu, shell} = require('electron')
+const path = require('path')
 let win = null
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
@@ -38,9 +39,12 @@ function createWin() {
     ]
   }])
   Menu.setApplicationMenu(menu)
+  console.log('app.getAppPath()', app.getAppPath());
   win = new BrowserWindow({
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'js\\preload.js')
     },
     show: false,
     width: 768,

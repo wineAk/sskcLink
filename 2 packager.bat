@@ -1,0 +1,1 @@
+./node_modules/.bin/electron-packager src sskcLink --platform=win32 --arch=ia32 --icon=src/images/icon.png --overwrite

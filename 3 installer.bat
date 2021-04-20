@@ -1,0 +1,1 @@
+./node_modules/.bin/electron-installer-windows --src sskcLink-win32-ia32/ --dest sskcLink-installers --icon src/images/icon.ico

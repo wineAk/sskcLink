@@ -1,10 +1,7 @@
 'use strict'
-const {ipcRenderer} = require('electron')
-const nowVersion = ipcRenderer.sendSync('now-version')
 document.addEventListener('DOMContentLoaded', () => {
   let HTML = ''
   let NAME = ''
-  if (nowVersion) document.getElementById('version').textContent = nowVersion
   document.getElementById('upload').addEventListener('click', event => {
     document.getElementById('file').click()
   })

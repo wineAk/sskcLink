@@ -12,9 +12,8 @@
   },
   "author": "sskc",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
-    "electron": "^10.4.1",
+    "electron": "^12.0.4",
     "electron-installer-windows": "^3.0.0",
     "electron-packager": "^15.2.0"
   }
