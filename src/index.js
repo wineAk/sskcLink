@@ -1,8 +1,6 @@
 'use strict'
 if (require('electron-squirrel-startup')) return
-const packagejson = require('./package.json')
 const {app, BrowserWindow, ipcMain, Menu, shell} = require('electron')
-const path = require('path')
 let win = null
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
@@ -20,10 +18,12 @@ app.on('window-all-closed', () => {
   if (process.platform != 'darwin') app.quit()
 })
 ipcMain.on('now-version', (event) => {
+  const packagejson = require('./package.json')
   event.returnValue = packagejson['version']
 })
 
 function createWin() {
+  const path = require('path')
   const menu = Menu.buildFromTemplate([{
     label: 'メニュー',
     submenu: [{
@@ -39,12 +39,11 @@ function createWin() {
     ]
   }])
   Menu.setApplicationMenu(menu)
-  console.log('app.getAppPath()', app.getAppPath());
   win = new BrowserWindow({
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'js\\preload.js')
+      preload: path.join(__dirname, 'js', 'preload.js')
     },
     show: false,
     width: 768,
@@ -54,7 +53,7 @@ function createWin() {
     icon: `${__dirname}/images/icon.png`
   })
   win.once('ready-to-show', () => win.show())
-  win.loadURL(`file://${__dirname}/index.html`)
+  win.loadFile(path.join(__dirname, 'index.html'))
   win.webContents.on('new-window', (ev, url) => {
     ev.preventDefault()
     shell.openExternal(url)
