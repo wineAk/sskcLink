@@ -1,6 +1,6 @@
 {
   "name": "sskcLink",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ダイレクトリンクを生成します",
   "main": "index.js",
   "scripts": {
